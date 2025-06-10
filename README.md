@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 老撾基普 (LAK) 即時換匯報價前端
 
-## Getting Started
+這是一個使用 Next.js 開發的即時換匯報價網站，專注於提供老撾基普 (LAK) 與其他主要貨幣（USD/CNY/TWD）之間的即時匯率資訊和換匯計算功能。
 
-First, run the development server:
+## 🎯 專案目標
 
+- 提供即時、準確的匯率報價
+- 讓使用者能夠快速計算換匯金額
+- 支援響應式設計，確保在各種裝置上都能完美呈現
+- 提供深色模式支援，優化使用體驗
+
+## ✨ 主要功能
+
+### 匯率報價展示
+- 即時顯示 USD、CNY、TWD 對 LAK 的匯率
+- 支援不同支付方式（現金、支付寶/微信支付）
+- 自動更新最新匯率資訊
+
+### 換匯計算器
+- 支援多幣別輸入（USD/CNY/TWD）
+- 即時計算可兌換的 LAK 金額
+- 優化輸入體驗（防抖動處理）
+
+### 使用者體驗
+- 響應式設計，完美支援手機和桌面裝置
+- 深色模式支援
+- 清晰的匯率更新時間顯示
+
+## 🛠 技術架構
+
+- **前端框架**: Next.js 14
+- **樣式解決方案**: Tailwind CSS
+- **狀態管理**: React Hooks + SWR
+- **字體**: Noto Sans TC
+- **部署**: Vercel（推薦）
+
+## 🚀 快速開始
+
+1. 克隆專案
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [repository-url]
+cd rates-web
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. 安裝依賴
+```bash
+npm install
+# 或
+yarn install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. 啟動開發伺服器
+```bash
+npm run dev
+# 或
+yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. 開啟瀏覽器訪問 `http://localhost:3000`
 
-## Learn More
+## 📱 響應式設計
 
-To learn more about Next.js, take a look at the following resources:
+- 桌面版：完整表格展示
+- 手機版（≤640px）：卡片式排版
+- 支援深色模式切換
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 設計規範
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 配色方案
+- 主色：`#2563EB` (Tailwind blue-600)
+- 副色：`#FACC15` (amber-400)
+- 支援深色模式
 
-## Deploy on Vercel
+### 字體
+- 主要字體：Noto Sans TC
+- 備用字體：系統字體
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📝 開發指南
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 專案結構
+```
+rates-web/
+ ├─ app/                # Next.js 應用程式目錄
+ ├─ components/         # React 元件
+ ├─ lib/               # 工具函數和 hooks
+ ├─ public/            # 靜態資源
+ └─ styles/            # 全局樣式
+```
+
+### 開發注意事項
+1. 遵循 Next.js 的檔案路由規則
+2. 使用 Tailwind CSS 進行樣式開發
+3. 確保所有元件都支援 RWD
+4. 實作深色模式支援
+
+## 📄 授權
+
+本專案採用 MIT 授權條款 - 詳見 [LICENSE](LICENSE) 文件
+
+## 📞 聯絡方式
+
+如有任何問題或建議，請透過以下方式聯絡：
+- WhatsApp: [您的 WhatsApp ID]
+- WeChat: [您的 WeChat ID]
