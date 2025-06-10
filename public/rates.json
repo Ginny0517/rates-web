@@ -1,0 +1,32 @@
+[
+  {
+    "currency": "USD",
+    "method": "現金",
+    "rate": 21000
+  },
+  {
+    "currency": "USD",
+    "method": "轉帳",
+    "rate": 21100
+  },
+  {
+    "currency": "THB",
+    "method": "現金",
+    "rate": 600
+  },
+  {
+    "currency": "THB",
+    "method": "轉帳",
+    "rate": 610
+  },
+  {
+    "currency": "CNY",
+    "method": "現金",
+    "rate": 2900
+  },
+  {
+    "currency": "CNY",
+    "method": "轉帳",
+    "rate": 2950
+  }
+] 
