@@ -5,28 +5,23 @@
     "rate": 21000
   },
   {
-    "currency": "USD",
-    "method": "轉帳",
-    "rate": 21100
-  },
-  {
-    "currency": "THB",
-    "method": "現金",
-    "rate": 600
-  },
-  {
-    "currency": "THB",
-    "method": "轉帳",
-    "rate": 610
-  },
-  {
     "currency": "CNY",
     "method": "現金",
     "rate": 2900
   },
   {
     "currency": "CNY",
-    "method": "轉帳",
+    "method": "支付寶/微信",
     "rate": 2950
+  },
+  {
+    "currency": "TWD",
+    "method": "現金",
+    "rate": 650
+  },
+  {
+    "currency": "TWD",
+    "method": "街口支付/全支付/轉帳",
+    "rate": 660
   }
 ] 
