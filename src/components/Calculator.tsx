@@ -30,10 +30,11 @@ export default function Calculator({ rates, currentLang }: CalculatorProps) {
     if (availableMethods.length > 0 && !availableMethods.includes(selectedMethod)) {
       setSelectedMethod(availableMethods[0]);
     }
-  }, [selectedCurrency, availableMethods]);
+  }, [selectedCurrency, availableMethods, selectedMethod]);
 
+  // 計算匯率結果
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const calculateResult = () => {
       if (amount && rates && rates.length > 0) {
         const rate = rates.find(r => r.currency === selectedCurrency && r.method === selectedMethod);
         if (rate) {
@@ -44,8 +45,9 @@ export default function Calculator({ rates, currentLang }: CalculatorProps) {
       } else {
         setResult(null);
       }
-    }, 300);
+    };
 
+    const timer = setTimeout(calculateResult, 300);
     return () => clearTimeout(timer);
   }, [amount, selectedCurrency, selectedMethod, rates]);
 
