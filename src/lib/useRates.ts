@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchBinanceP2P } from '@/utils/binance';
-import { fetchMaxTWD } from '@/utils/max';
+import { fetchBitoProTWD } from '@/utils/bitopro';
 
 export interface Rate {
   currency: string;
@@ -64,8 +64,8 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         console.error('TWD rate is required for TWD calculation');
         return 0;
       }
-      // TWD 匯率 = LAK/USD 除以 Max 的 USDT/TWD 匯率
-      const twdFinalRate = Math.floor(lakUsdRate / twdRate * 2) / 2;
+      // TWD 匯率 = LAK/USD 除以 BitoPro 的 USDT/TWD 匯率
+      const twdFinalRate = Math.floor(lakUsdRate / twdRate * 0.992 / 2) * 2;
       
       // 如果是街口支付，匯率加 10
       if (method === "街口支付/全支付/轉帳") {
@@ -107,7 +107,7 @@ export function useRates() {
       const usdtCny = await fetchBinanceP2P("USDT", "CNY");
       console.log('USDT/CNY rate:', usdtCny);
       
-      const usdtTwd = await fetchMaxTWD("last");
+      const usdtTwd = await fetchBitoProTWD();
       console.log('USDT/TWD rate:', usdtTwd);
 
       const baseRate = Number(usdtLak);

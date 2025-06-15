@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchBinanceP2P } from "@/utils/binance";
-import { fetchMaxTWD } from "@/utils/max";
+import { fetchBitoProTWD } from "@/utils/bitopro";
 
 export default function RatesPanel() {
   const [usdtLak, setUsdtLak] = useState<string | number>("-");
@@ -12,7 +12,7 @@ export default function RatesPanel() {
     setLoading(true);
     setUsdtLak(await fetchBinanceP2P("USDT", "LAK", "SELL"));
     setUsdtCny(await fetchBinanceP2P("USDT", "CNY", "BUY"));
-    setUsdtTwd(await fetchMaxTWD("last"));
+    setUsdtTwd(await fetchBitoProTWD());
     setLoading(false);
   };
 
@@ -31,7 +31,7 @@ export default function RatesPanel() {
         <ul className="space-y-2">
           <li>幣安 USDT/LAK (SELL): <span className="font-mono">{usdtLak}</span></li>
           <li>幣安 USDT/CNY (BUY): <span className="font-mono">{usdtCny}</span></li>
-          <li>MAX USDT/TWD: <span className="font-mono">{usdtTwd}</span></li>
+          <li>BitoPro USDT/TWD: <span className="font-mono">{usdtTwd}</span></li>
         </ul>
       )}
       <button onClick={fetchAll} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">手動更新</button>

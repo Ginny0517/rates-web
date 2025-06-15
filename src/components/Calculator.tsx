@@ -27,17 +27,19 @@ export default function Calculator({ rates, currentLang }: CalculatorProps) {
 
   // 當貨幣改變時，重置支付方式為第一個可用的選項
   useEffect(() => {
-    if (availableMethods.length > 0) {
+    if (availableMethods.length > 0 && !availableMethods.includes(selectedMethod)) {
       setSelectedMethod(availableMethods[0]);
     }
   }, [selectedCurrency, availableMethods]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (amount && rates) {
+      if (amount && rates && rates.length > 0) {
         const rate = rates.find(r => r.currency === selectedCurrency && r.method === selectedMethod);
         if (rate) {
           setResult(Number(amount) * rate.rate);
+        } else {
+          setResult(null);
         }
       } else {
         setResult(null);

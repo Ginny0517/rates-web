@@ -8,7 +8,7 @@ interface LanguageToggleProps {
 
 export default function LanguageToggle({ currentLang, onLanguageChange }: LanguageToggleProps) {
   return (
-    <div className="fixed bottom-4 right-4 flex flex-col space-y-2">
+    <div className="fixed bottom-4 right-4">
       <div className="flex space-x-2">
         <button
           onClick={() => onLanguageChange('zh-TW')}
@@ -30,8 +30,6 @@ export default function LanguageToggle({ currentLang, onLanguageChange }: Langua
         >
           简体
         </button>
-      </div>
-      <div className="flex space-x-2">
         <button
           onClick={() => onLanguageChange('lo')}
           className={`px-3 py-2 rounded-md ${
