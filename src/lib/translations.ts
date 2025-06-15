@@ -36,7 +36,7 @@ export const translations = {
     '現金': 'ເງິນສົດ',
     '轉帳': 'ໂອນເງິນ',
     '支付寶/微信': 'Alipay/WeChat',
-    '街口支付/全支付/轉帳': 'JKOPAY/Transfer'
+    '街口支付/全支付/轉帳': 'JKOPAY/ໂອນເງິນ'
   },
   'en': {
     loading: 'Loading...',
