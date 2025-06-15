@@ -30,7 +30,7 @@ export default function Calculator({ rates, currentLang }: CalculatorProps) {
     if (availableMethods.length > 0) {
       setSelectedMethod(availableMethods[0]);
     }
-  }, [selectedCurrency]);
+  }, [selectedCurrency, availableMethods]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
