@@ -28,7 +28,7 @@ export const translations = {
   'lo': {
     loading: 'ກຳລັງໂຫຼດ...',
     error: 'ໂຫຼດລົ້ມເຫລວ, ກະລຸນາລອງໃໝ່ພາຍຫຼັງ',
-    currency: 'ເລືອກສົດຕະຣະສັນ',
+    currency: 'ເລືອກສະກຸນເງິນ',
     paymentMethod: 'ວິທີການຊຳລະເງິນ',
     amount: 'ປ້ອນຈຳນວນເງິນ',
     result: 'ຈະໄດ້ຮັບ: {amount} LAK',
