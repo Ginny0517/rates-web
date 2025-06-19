@@ -38,7 +38,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         return 0;
       }
       // CNY 匯率 = LAK/USD 除以 USDT/CNY 匯率
-      const cnyFinalRate = Math.floor(lakUsdRate / cnyRate * 0.99 / 5) * 5;
+      const cnyFinalRate = Math.floor(lakUsdRate / (cnyRate + 0.01) * 0.99 / 5) * 5;
       
       // 如果是支付寶/微信，匯率加 50
       if (method === "支付寶/微信") {
