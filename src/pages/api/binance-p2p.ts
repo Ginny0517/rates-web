@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { asset = 'USDT', fiat = 'LAK', tradeType = 'SELL' } = req.query;
+  const { asset = 'USDT', fiat = 'LAK' } = req.query;
   const url = "https://c2c.binance.com/bapi/c2c/v2/friendly/c2c/adv/search";
   
   // 根據法幣類型決定是否比較 BUY 和 SELL
