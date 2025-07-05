@@ -4,8 +4,9 @@ export async function fetchBinanceP2P(asset: string, fiat: string, tradeType: st
   if (!res.ok) return "#NO_DATA";
   const json = await res.json();
   
-  // 處理新的 API 回應格式
+  // 處理新的 API 回應格式 - 使用比較後的 finalPrice
   if (json.finalPrice) {
+    console.log(`${asset}/${fiat} final price:`, json.finalPrice, `(selected: ${json.selectedType})`);
     return json.finalPrice;
   }
   
