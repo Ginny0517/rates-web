@@ -22,11 +22,14 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
   // LAK/USD 匯率
   const lakUsdRate = Number(apiRate);
 
-  logger.debug(`Calculating rate for ${currency} (${method}):`, {
-    apiRate,
-    lakUsdRate,
-    cnyRate,
-    twdRate
+  logger('debug', {
+    msg: `Calculating rate for ${currency} (${method})`,
+    meta: {
+      apiRate,
+      lakUsdRate,
+      cnyRate,
+      twdRate
+    }
   });
 
   switch (currency) {
@@ -35,7 +38,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
     
     case "CNY":
       if (!cnyRate) {
-        logger.error('CNY rate is required for CNY calculation');
+        logger('error', { msg: 'CNY rate is required for CNY calculation' });
         return 0;
       }
       // CNY 匯率 = LAK/USD 除以 USDT/CNY 匯率
@@ -44,25 +47,31 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
       // 如果是支付寶/微信，匯率加 50
       if (method === "支付寶/微信") {
         const adjustedRate = cnyFinalRate + 5;
-        logger.debug('CNY rate calculation (支付寶/微信):', {
-          lakUsdRate,
-          cnyApiRate: cnyRate,
-          baseCnyRate: cnyFinalRate,
-          adjustedRate
+        logger('debug', {
+          msg: 'CNY rate calculation (支付寶/微信)',
+          meta: {
+            lakUsdRate,
+            cnyApiRate: cnyRate,
+            baseCnyRate: cnyFinalRate,
+            adjustedRate
+          }
         });
         return adjustedRate;
       }
 
-      logger.debug('CNY rate calculation (現金):', {
-        lakUsdRate,
-        cnyApiRate: cnyRate,
-        finalCnyRate: cnyFinalRate
+      logger('debug', {
+        msg: 'CNY rate calculation (現金)',
+        meta: {
+          lakUsdRate,
+          cnyApiRate: cnyRate,
+          finalCnyRate: cnyFinalRate
+        }
       });
       return cnyFinalRate;
     
     case "TWD":
       if (!twdRate) {
-        logger.error('TWD rate is required for TWD calculation');
+        logger('error', { msg: 'TWD rate is required for TWD calculation' });
         return 0;
       }
       // TWD 匯率 = LAK/USD 除以 BitoPro 的 USDT/TWD 匯率
@@ -71,19 +80,25 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
       // 如果是街口支付，匯率加 10
       if (method === "街口支付/全支付/轉帳") {
         const adjustedRate = twdFinalRate + 0.5;
-        logger.debug('TWD rate calculation (街口支付):', {
-          lakUsdRate,
-          twdApiRate: twdRate,
-          baseTwdRate: twdFinalRate,
-          adjustedRate
+        logger('debug', {
+          msg: 'TWD rate calculation (街口支付)',
+          meta: {
+            lakUsdRate,
+            twdApiRate: twdRate,
+            baseTwdRate: twdFinalRate,
+            adjustedRate
+          }
         });
         return adjustedRate;
       }
 
-      logger.debug('TWD rate calculation (現金):', {
-        lakUsdRate,
-        twdApiRate: twdRate,
-        finalTwdRate: twdFinalRate
+      logger('debug', {
+        msg: 'TWD rate calculation (現金)',
+        meta: {
+          lakUsdRate,
+          twdApiRate: twdRate,
+          finalTwdRate: twdFinalRate
+        }
       });
       return twdFinalRate;
     
@@ -99,17 +114,17 @@ export function useRates() {
 
   const fetchRates = async () => {
     try {
-      logger.info('Fetching rates...');
+      logger('info', { msg: 'Fetching rates...' });
       
       // 獲取實時匯率
       const usdtLak = await fetchBinanceP2P("USDT", "LAK", "SELL");
-      logger.rates('USDT/LAK rate:', usdtLak);
+      logger('rates', { msg: 'USDT/LAK rate', meta: { rate: usdtLak } });
       
       const usdtCny = await fetchBinanceP2P("USDT", "CNY");
-      logger.rates('USDT/CNY rate:', usdtCny);
+      logger('rates', { msg: 'USDT/CNY rate', meta: { rate: usdtCny } });
       
       const usdtTwd = await fetchBitoProTWD();
-      logger.rates('USDT/TWD rate:', usdtTwd);
+      logger('rates', { msg: 'USDT/TWD rate', meta: { rate: usdtTwd } });
 
       const baseRate = Number(usdtLak);
       const cnyRate = Number(usdtCny);
@@ -136,12 +151,12 @@ export function useRates() {
         });
       });
 
-      logger.debug('Final calculated rates:', updatedRates);
+      logger('debug', { msg: 'Final calculated rates', meta: { rates: updatedRates } });
 
       setRates(updatedRates);
       setIsLoading(false);
     } catch (error) {
-      logger.error('Error fetching rates:', error);
+      logger('error', { msg: 'Error fetching rates', meta: { error } });
       setIsError(true);
       setIsLoading(false);
     }

@@ -28,11 +28,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       payTypes: []
     };
 
-    logger.debug('Binance P2P API Request (CNY - comparing BUY/SELL):', {
-      url,
-      buyPayload,
-      sellPayload,
-      query: req.query
+    logger('debug', {
+      msg: 'Binance P2P API Request (CNY - comparing BUY/SELL)',
+      meta: {
+        url,
+        buyPayload,
+        sellPayload,
+        query: req.query
+      }
     });
 
     try {
@@ -53,11 +56,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const buyData = await buyResponse.json();
       const sellData = await sellResponse.json();
       
-      logger.debug('Binance P2P API Response (CNY):', {
-        buyStatus: buyResponse.status,
-        sellStatus: sellResponse.status,
-        buyData: buyData,
-        sellData: sellData
+      logger('debug', {
+        msg: 'Binance P2P API Response (CNY)',
+        meta: {
+          buyStatus: buyResponse.status,
+          sellStatus: sellResponse.status,
+          buyData: buyData,
+          sellData: sellData
+        }
       });
 
       // 提取匯率並比較
@@ -94,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json(result);
     } catch (error) {
-      logger.error('Binance P2P API Error (CNY):', error);
+      logger('error', { msg: 'Binance P2P API Error (CNY)', meta: { error } });
       res.status(500).json({ error: "Failed to fetch Binance API" });
     }
   } else {
@@ -108,10 +114,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       payTypes: []
     };
 
-    logger.debug('Binance P2P API Request (SELL only):', {
-      url,
-      payload,
-      query: req.query
+    logger('debug', {
+      msg: 'Binance P2P API Request (SELL only)',
+      meta: {
+        url,
+        payload,
+        query: req.query
+      }
     });
 
     try {
@@ -122,9 +131,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       const data = await response.json();
       
-      logger.debug('Binance P2P API Response (SELL only):', {
-        status: response.status,
-        data: data
+      logger('debug', {
+        msg: 'Binance P2P API Response (SELL only)',
+        meta: {
+          status: response.status,
+          data: data
+        }
       });
 
       const sellPrice = data?.data?.[0]?.adv?.price;
@@ -138,7 +150,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json(result);
     } catch (error) {
-      logger.error('Binance P2P API Error (SELL only):', error);
+      logger('error', { msg: 'Binance P2P API Error (SELL only)', meta: { error } });
       res.status(500).json({ error: "Failed to fetch Binance API" });
     }
   }
