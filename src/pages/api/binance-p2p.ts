@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { logger } from '@/utils/logger';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { asset = 'USDT', fiat = 'LAK' } = req.query;
@@ -27,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       payTypes: []
     };
 
-    console.log('Binance P2P API Request (CNY - comparing BUY/SELL):', {
+    logger.debug('Binance P2P API Request (CNY - comparing BUY/SELL):', {
       url,
       buyPayload,
       sellPayload,
@@ -52,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const buyData = await buyResponse.json();
       const sellData = await sellResponse.json();
       
-      console.log('Binance P2P API Response (CNY):', {
+      logger.debug('Binance P2P API Response (CNY):', {
         buyStatus: buyResponse.status,
         sellStatus: sellResponse.status,
         buyData: buyData,
@@ -93,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json(result);
     } catch (error) {
-      console.error('Binance P2P API Error (CNY):', error);
+      logger.error('Binance P2P API Error (CNY):', error);
       res.status(500).json({ error: "Failed to fetch Binance API" });
     }
   } else {
@@ -107,7 +108,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       payTypes: []
     };
 
-    console.log('Binance P2P API Request (SELL only):', {
+    logger.debug('Binance P2P API Request (SELL only):', {
       url,
       payload,
       query: req.query
@@ -121,7 +122,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       const data = await response.json();
       
-      console.log('Binance P2P API Response (SELL only):', {
+      logger.debug('Binance P2P API Response (SELL only):', {
         status: response.status,
         data: data
       });
@@ -137,7 +138,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.status(200).json(result);
     } catch (error) {
-      console.error('Binance P2P API Error (SELL only):', error);
+      logger.error('Binance P2P API Error (SELL only):', error);
       res.status(500).json({ error: "Failed to fetch Binance API" });
     }
   }

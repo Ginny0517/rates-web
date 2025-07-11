@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 export async function fetchBinanceP2P(asset: string, fiat: string, tradeType: string = "SELL") {
   const url = `/api/binance-p2p?asset=${asset}&fiat=${fiat}&tradeType=${tradeType}`;
   const res = await fetch(url);
@@ -6,7 +8,10 @@ export async function fetchBinanceP2P(asset: string, fiat: string, tradeType: st
   
   // 處理新的 API 回應格式 - 使用比較後的 finalPrice
   if (json.finalPrice) {
-    console.log(`${asset}/${fiat} final price:`, json.finalPrice, `(selected: ${json.selectedType})`);
+    logger.debug(`${asset}/${fiat} final price:`, {
+      price: json.finalPrice,
+      selectedType: json.selectedType
+    });
     return json.finalPrice;
   }
   

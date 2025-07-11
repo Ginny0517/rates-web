@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchBinanceP2P } from '@/utils/binance';
 import { fetchBitoProTWD } from '@/utils/bitopro';
+import { logger } from '@/utils/logger';
 
 export interface Rate {
   currency: string;
@@ -21,7 +22,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
   // LAK/USD 匯率
   const lakUsdRate = Number(apiRate);
 
-  console.log(`Calculating rate for ${currency} (${method}):`, {
+  logger.debug(`Calculating rate for ${currency} (${method}):`, {
     apiRate,
     lakUsdRate,
     cnyRate,
@@ -34,7 +35,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
     
     case "CNY":
       if (!cnyRate) {
-        console.error('CNY rate is required for CNY calculation');
+        logger.error('CNY rate is required for CNY calculation');
         return 0;
       }
       // CNY 匯率 = LAK/USD 除以 USDT/CNY 匯率
@@ -43,7 +44,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
       // 如果是支付寶/微信，匯率加 50
       if (method === "支付寶/微信") {
         const adjustedRate = cnyFinalRate + 5;
-        console.log('CNY rate calculation (支付寶/微信):', {
+        logger.debug('CNY rate calculation (支付寶/微信):', {
           lakUsdRate,
           cnyApiRate: cnyRate,
           baseCnyRate: cnyFinalRate,
@@ -52,7 +53,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         return adjustedRate;
       }
 
-      console.log('CNY rate calculation (現金):', {
+      logger.debug('CNY rate calculation (現金):', {
         lakUsdRate,
         cnyApiRate: cnyRate,
         finalCnyRate: cnyFinalRate
@@ -61,7 +62,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
     
     case "TWD":
       if (!twdRate) {
-        console.error('TWD rate is required for TWD calculation');
+        logger.error('TWD rate is required for TWD calculation');
         return 0;
       }
       // TWD 匯率 = LAK/USD 除以 BitoPro 的 USDT/TWD 匯率
@@ -70,7 +71,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
       // 如果是街口支付，匯率加 10
       if (method === "街口支付/全支付/轉帳") {
         const adjustedRate = twdFinalRate + 0.5;
-        console.log('TWD rate calculation (街口支付):', {
+        logger.debug('TWD rate calculation (街口支付):', {
           lakUsdRate,
           twdApiRate: twdRate,
           baseTwdRate: twdFinalRate,
@@ -79,7 +80,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         return adjustedRate;
       }
 
-      console.log('TWD rate calculation (現金):', {
+      logger.debug('TWD rate calculation (現金):', {
         lakUsdRate,
         twdApiRate: twdRate,
         finalTwdRate: twdFinalRate
@@ -98,17 +99,17 @@ export function useRates() {
 
   const fetchRates = async () => {
     try {
-      console.log('Fetching rates...');
+      logger.info('Fetching rates...');
       
       // 獲取實時匯率
       const usdtLak = await fetchBinanceP2P("USDT", "LAK", "SELL");
-      console.log('USDT/LAK rate:', usdtLak);
+      logger.rates('USDT/LAK rate:', usdtLak);
       
       const usdtCny = await fetchBinanceP2P("USDT", "CNY");
-      console.log('USDT/CNY rate:', usdtCny);
+      logger.rates('USDT/CNY rate:', usdtCny);
       
       const usdtTwd = await fetchBitoProTWD();
-      console.log('USDT/TWD rate:', usdtTwd);
+      logger.rates('USDT/TWD rate:', usdtTwd);
 
       const baseRate = Number(usdtLak);
       const cnyRate = Number(usdtCny);
@@ -135,12 +136,12 @@ export function useRates() {
         });
       });
 
-      console.log('Final calculated rates:', updatedRates);
+      logger.debug('Final calculated rates:', updatedRates);
 
       setRates(updatedRates);
       setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching rates:', error);
+      logger.error('Error fetching rates:', error);
       setIsError(true);
       setIsLoading(false);
     }
