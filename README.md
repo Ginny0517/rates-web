@@ -93,12 +93,4 @@ rates-web/
 3. 確保所有元件都支援 RWD
 4. 實作深色模式支援
 
-## 📄 授權
 
-本專案採用 MIT 授權條款 - 詳見 [LICENSE](LICENSE) 文件
-
-## 📞 聯絡方式
-
-如有任何問題或建議，請透過以下方式聯絡：
-- WhatsApp: [您的 WhatsApp ID]
-- WeChat: [您的 WeChat ID]
