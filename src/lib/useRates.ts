@@ -3,6 +3,24 @@ import { fetchBinanceP2P } from '@/utils/binance';
 import { fetchBitoProTWD } from '@/utils/bitopro';
 import { logger } from '@/utils/logger';
 
+// 獲取 LAK 匯率的函數
+async function fetchLakRate(): Promise<number> {
+  try {
+    const response = await fetch('/api/lak-rate');
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    
+    logger('debug', { msg: 'LAK rate fetched successfully', meta: { rate: data.rate } });
+    return data.rate;
+  } catch (error) {
+    logger('error', { msg: 'Failed to fetch LAK rate', meta: { error } });
+    throw error;
+  }
+}
+
 export interface Rate {
   currency: string;
   method: string;
@@ -14,11 +32,12 @@ export interface Rate {
 const PAYMENT_METHODS = {
   USD: ["現金"],
   CNY: ["現金", "支付寶/微信"],
-  TWD: ["現金", "街口支付/全支付/轉帳"]
+  TWD: ["現金", "街口支付/全支付/轉帳"],
+  THB: ["現金"]
 } as const;
 
 // 匯率計算函數
-function calculateRate(apiRate: number, currency: string, method: string, cnyRate?: number, twdRate?: number): number {
+function calculateRate(apiRate: number, currency: string, method: string, cnyRate?: number, twdRate?: number, lakRate?: number): number {
   // LAK/USD 匯率
   const lakUsdRate = Number(apiRate);
 
@@ -28,7 +47,8 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
       apiRate,
       lakUsdRate,
       cnyRate,
-      twdRate
+      twdRate,
+      lakRate
     }
   });
 
@@ -75,7 +95,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         return 0;
       }
       // TWD 匯率 = LAK/USD 除以 BitoPro 的 USDT/TWD 匯率
-      const twdFinalRate = Math.floor(lakUsdRate / twdRate * 0.992 / 2) * 2;
+      const twdFinalRate = Math.floor(lakUsdRate / twdRate * 0.992 * 2) / 2;
       
       // 如果是街口支付，匯率加 10
       if (method === "街口支付/全支付/轉帳") {
@@ -102,6 +122,23 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
       });
       return twdFinalRate;
     
+    case "THB":
+      // 新增 THB 匯率計算，直接使用 LAK/THB 匯率
+      if (!lakRate) {
+        logger('error', { msg: 'LAK rate is required for THB calculation' });
+        return 0;
+      }
+      const thbFinalRate = Math.floor(lakRate * 1.0037 * 2) / 2;
+      
+      logger('debug', {
+        msg: 'THB rate calculation (現金)',
+        meta: {
+          lakThbRate: lakRate,
+          finalThbRate: thbFinalRate
+        }
+      });
+      return thbFinalRate;
+    
     default:
       return 0;
   }
@@ -126,9 +163,14 @@ export function useRates() {
       const usdtTwd = await fetchBitoProTWD();
       logger('rates', { msg: 'USDT/TWD rate', meta: { rate: usdtTwd } });
 
+      // 新增：獲取 LAK/THB 匯率
+      const lakThb = await fetchLakRate();
+      logger('rates', { msg: 'LAK/THB rate', meta: { rate: lakThb } });
+
       const baseRate = Number(usdtLak);
       const cnyRate = Number(usdtCny);
       const twdRate = Number(usdtTwd);
+      const lakRate = lakThb;
 
       // 計算所有匯率組合
       const updatedRates: Rate[] = [];
@@ -144,7 +186,8 @@ export function useRates() {
               currency,
               method,
               currency === "CNY" ? cnyRate : undefined,
-              currency === "TWD" ? twdRate : undefined
+              currency === "TWD" ? twdRate : undefined,
+              currency === "THB" ? lakRate : undefined
             ),
             lastUpdate: new Date().toISOString()
           });
