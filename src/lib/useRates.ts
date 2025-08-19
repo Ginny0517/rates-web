@@ -128,7 +128,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         logger('error', { msg: 'LAK rate is required for THB calculation' });
         return 0;
       }
-      const thbFinalRate = Math.floor(lakRate * 1.0037 * 2) / 2;
+      const thbFinalRate = Math.floor(lakRate * 1.0055 * 2) / 2;
       
       logger('debug', {
         msg: 'THB rate calculation (現金)',
