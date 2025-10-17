@@ -95,7 +95,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         return 0;
       }
       // TWD 匯率 = LAK/USD 除以 BitoPro 的 USDT/TWD 匯率
-      const twdFinalRate = Math.floor(lakUsdRate / twdRate * 0.992 * 2) / 2;
+      const twdFinalRate = Math.floor(lakUsdRate / (twdRate || 0) * 0.992 * 2) / 2;
       
       // 如果是街口支付，匯率加 10
       if (method === "街口支付/全支付/轉帳") {
@@ -170,7 +170,7 @@ export function useRates() {
       const baseRate = Number(usdtLak);
       const cnyRate = Number(usdtCny);
       const twdRate = Number(usdtTwd);
-      const lakRate = lakThb;
+      const lakRate = Number(lakThb);
 
       // 計算所有匯率組合
       const updatedRates: Rate[] = [];

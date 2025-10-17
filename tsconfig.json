@@ -17,6 +17,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    // 確保在 Vercel 上正確工作
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
     "plugins": [
       {
         "name": "next"
