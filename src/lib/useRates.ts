@@ -62,7 +62,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         return 0;
       }
       // CNY 匯率 = LAK/USD 除以 USDT/CNY 匯率
-      const cnyFinalRate = Math.floor(lakUsdRate / (cnyRate + 0.01) * 0.99 / 5) * 5;
+      const cnyFinalRate = Math.floor(lakUsdRate * 0.995 / (cnyRate + 0.01) * 0.99 / 5) * 5;
       
       // 如果是支付寶/微信，匯率加 50
       if (method === "支付寶/微信") {
@@ -95,7 +95,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         return 0;
       }
       // TWD 匯率 = LAK/USD 除以 BitoPro 的 USDT/TWD 匯率
-      const twdFinalRate = Math.floor(lakUsdRate / (twdRate || 0) * 0.992 * 2) / 2;
+      const twdFinalRate = Math.floor(lakUsdRate / (twdRate || 0) * 0.992 * 0.995 * 2) / 2;
       
       // 如果是街口支付，匯率加 10
       if (method === "街口支付/全支付/轉帳") {
@@ -128,7 +128,7 @@ function calculateRate(apiRate: number, currency: string, method: string, cnyRat
         logger('error', { msg: 'LAK rate is required for THB calculation' });
         return 0;
       }
-      const thbFinalRate = Math.floor(lakRate * 1.0055 * 2) / 2;
+      const thbFinalRate = Math.floor(lakRate * 1.005 * 2) / 2;
       
       logger('debug', {
         msg: 'THB rate calculation (現金)',
